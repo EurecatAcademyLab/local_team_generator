@@ -21,17 +21,16 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
- */
+  */
 
 
 require_once('../../config.php');
-require_once($CFG->dirroot. '/local/group_generator/form/local_group_form.php');
-require_once($CFG->dirroot. '/local/group_generator/form/local_gg_form.php');
-require_once($CFG->dirroot. '/local/group_generator/form/local_customisable_form.php');
-require_once($CFG->dirroot. '/local/group_generator/form/local_incompatible.php');
-require_once($CFG->dirroot. '/local/group_generator/classes/print/nav_bar.php');
-require_once($CFG->dirroot. '/local/group_generator/classes/print/body_print.php');
+require_once($CFG->dirroot. '/local/group_generator/form/localteamform.php');
+require_once($CFG->dirroot. '/local/group_generator/form/localtgform.php');
+require_once($CFG->dirroot. '/local/group_generator/form/localfilterform.php');
+require_once($CFG->dirroot. '/local/group_generator/form/localtandem.php');
+require_once($CFG->dirroot. '/local/group_generator/classes/print/navbar.php');
+require_once($CFG->dirroot. '/local/group_generator/classes/print/bodyprint.php');
 
 $context = context_system::instance();
 
@@ -42,14 +41,14 @@ $PAGE->set_title($SITE->fullname);
 $title = get_string('pluginname', 'local_group_generator');
 $PAGE->set_heading($title);
 
-$PAGE->requires->js('/local/group_generator/amd/js_creategroup.js');
-$PAGE->requires->js('/local/group_generator/amd/js_tandem.js');
-$PAGE->requires->js('/local/group_generator/amd/js_filter.js');
+$PAGE->requires->js('/local/group_generator/amd/creategroup.js');
+$PAGE->requires->js('/local/group_generator/amd/tandem.js');
+$PAGE->requires->js('/local/group_generator/amd/filter.js');
 $PAGE->requires->js('/local/group_generator/amd/module.js');
-$PAGE->requires->js('/local/group_generator/amd/js_helpButton.js');
+$PAGE->requires->js('/local/group_generator/amd/helpButton.js');
 $PAGE->requires->jquery();
 
-$PAGE->requires->css( new moodle_url($CFG->wwwroot . '/local/group_generator/css/style_group.css') );
+$PAGE->requires->css( new moodle_url($CFG->wwwroot . '/local/group_generator/css/stylegroup.css') );
 
 $PAGE->requires->css(new \moodle_url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'));
 $PAGE->requires->js(new \moodle_url("https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"), true);

@@ -21,22 +21,31 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
- */
+  */
 
+/**
+ * Edit the tandem on DB
+ */
 
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_login();
 
-$idcourse = optional_param('idcourse', null, PARAM_TEXT);
+$id = optional_param('idtandem', null, PARAM_INT);
+$studenttandem = optional_param('student_tandem', null, PARAM_TEXT);
+$idcourse = optional_param('idcourse', null, PARAM_INT);
 
-$sql = "SELECT u.id, concat(u.firstname,' ',u.lastname) as 'name', c.fullname, c.id as 'curso'
-FROM {role_assignments} ra JOIN {user} u ON u.id = ra.userid
-JOIN {role} r ON r.id = ra.roleid JOIN {context} cxt ON cxt.id = ra.contextid
-JOIN {course} c ON c.id = cxt.instanceid WHERE ra.userid = u.id AND ra.contextid = cxt.id
-AND cxt.contextlevel = 50 AND cxt.instanceid = c.id AND r.id = 5 AND c.id = ?;";
-$result = $DB->get_records_sql($sql, array($idcourse));
+global $DB;
 
-echo json_encode($result);
+    $record = new stdClass();
+    $record->id = $id;
+    $record->student_tandem = $studenttandem;
+    $record->course_id = $idcourse;
+
+if ($DB->record_exists('local_gg_tandem', array('id' => $id))) {
+    $DB->update_record('local_gg_tandem', $record);
+
+    echo 'Task Edited Succesfully' . $record->id;
+}
+

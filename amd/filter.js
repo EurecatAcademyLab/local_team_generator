@@ -20,7 +20,6 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since      3.11
  */
 //
 // * Javascript
@@ -40,6 +39,13 @@ studentarray = [],
 idArray = [],
 valuestosave = [];
 let grupoArray = {};
+let $checkonly = '* Check ONLY one value at the time for your filter.';
+let $insertfiltername = '* Insert a filter name.';
+let $selectcourse = '* Select a Course.';
+let $insertat = '* Insert at least one value.';
+let $checkone = '* Check one value for your filter.';
+let $checkonl = '* Check ONLY one value at the time for your filter.';
+let $selectsome = '* Select some students to recive this value .';
 
 // Diferent function to get Values
 /**
@@ -88,7 +94,7 @@ function blocvalueConte(valueFilter) {
 function checkboxadd() {
   yourArray = [];
   if ($('input:checkbox[class = checkboxgroupAdd]:checked').length > 1) {
-    $('#result_personal_filter_title').append('<p class="text-danger"><small>* Check ONLY one value at the time for your filter </small></p>');
+    $('#result_personal_filter_title').append('<p class="text-danger"><small>'+$checkonly+'</small></p>');
   } else {
     $('input:checkbox[class = checkboxgroupAdd]:checked').each(function() {
       if (!this.disabled) {
@@ -172,7 +178,7 @@ $('#menucursofilter').change(function() {
 
   $.ajax({
     data: {idcourse},
-    url: 'classes/course/get_students_no_group.php',
+    url: 'classes/course/getstudentsnogroup.php',
     success: function(response) {
       $('.fitem3').remove();
       const element = $.parseJSON(response);
@@ -265,7 +271,7 @@ $('#save_personal_filter').click(function() {
     console.log(valuestosave)
     $.ajax({
       data: {title, idcourse2: idcourse2(), values: valuestosave, students: studentToSave},
-      url: 'classes/filter/save_filter.php',
+      url: 'classes/filter/savefilter.php',
       success:  function() {
         window.location.reload();
       }
@@ -280,36 +286,33 @@ function validationpersonalfilter() {
   $('.valifilterclass').html('');
 
   valueNameFilter = $('#type_name_filter').val();
-  // if (valueNameFilter.length == 0 || valueNameFilter == '') {
-  //   $('#valinamefilterContainer').append('<p class="text-danger"><small>* The name of Personal Filter cannot be empty </small></p>');
-  //   return false;
-  // } 
+
   if (filtertitleblock == '' || filtertitleblock === null || filtertitleblock == undefined) {
-    $('#valinamefilterContainer').append('<p class="text-danger"><small>* Insert a filter name </small></p>');
+    $('#valinamefilterContainer').append('<p class="text-danger"><small>'+$insertfiltername+'</small></p>');
     return false;
   }
   if (idcourse2() == '' || idcourse2() === null || idcourse2() == undefined) {
-    $('#valiseleccourseContainer').append('<p class="text-danger"><small>* Select a Course  </small></p>');
+    $('#valiseleccourseContainer').append('<p class="text-danger"><small>'+$selectcourse+'</small></p>');
     return false;
   }
   if ($('#bloc_valueConte').children().length < 1) {
-    $('#valivaluefilterContainer').append('<p class="text-danger"><small>* Insert at least one value  </small></p>');
+    $('#valivaluefilterContainer').append('<p class="text-danger"><small>'+$insertat+'</small></p>');
     return false;
   }
   if ($('input:checkbox[class = checkboxgroupAdd]:checked').length == 0) {
-    $('#result_personal_filter_title').append('<p class="text-danger"><small>* Check one value for your filter </small></p>');
+    $('#result_personal_filter_title').append('<p class="text-danger"><small>'+$checkone+'</small></p>');
     return false;
   }
   if ($('input:checkbox[class = checkboxgroupAdd]:checked').length > 1) {
-    $('#result_personal_filter_title').append('<p class="text-danger"><small>* Check ONLY one value at the time for your filter </small></p>');
+    $('#result_personal_filter_title').append('<p class="text-danger"><small>'+$checkonl+'</small></p>');
     return false;
   }
   if (yourArray.length > 1) {
-    $('#result_personal_filter_title').append('<p class="text-danger"><small>* Check ONLY one value at the time for your filter </small></p>');
+    $('#result_personal_filter_title').append('<p class="text-danger"><small>'+$checkonl+'</small></p>');
     return false;
   }
   if ($('input:checkbox[class = checkbox_student_add]:checked').length == 0) {
-    $('#result_personal_filter_title').append('<p class="text-danger"><small>* Select some students to recive this value </small></p>');
+    $('#result_personal_filter_title').append('<p class="text-danger"><small>'+$selectsome+'</small></p>');
     return false;
   }
   return true;

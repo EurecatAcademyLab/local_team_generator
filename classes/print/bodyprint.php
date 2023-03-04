@@ -21,8 +21,7 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
- */
+  */
 
 
 defined('MOODLE_INTERNAL') || die();
@@ -30,8 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_once("$CFG->dirroot/enrol/locallib.php");
 require_once("$CFG->dirroot/local/group_generator/classes/table/table.php");
-require_once("$CFG->dirroot/local/group_generator/classes/table/tandem_table.php");
-require_once("$CFG->dirroot/local/group_generator/classes/table/personal_table.php");
+require_once("$CFG->dirroot/local/group_generator/classes/table/tandemtable.php");
+require_once("$CFG->dirroot/local/group_generator/classes/table/personaltable.php");
 
 /**
  * To display the html tag body, with form and table instances.

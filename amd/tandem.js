@@ -20,8 +20,7 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
- */
+  */
 //
 // * Javascript
 // *
@@ -40,6 +39,8 @@ let no_tand_student = [],
 student_tandem = [];
 let edit = false;
 let notandemhere = false;
+let $notandemhere = 'No tandem here';
+let $choose = 'Choose...';
 
 /**
  * To get a course.
@@ -73,7 +74,7 @@ function studenttwo_value() {
 function get_id_tandem(callback) {
   $.ajax({
     data: {idcourse: id_course3()},
-    url: 'classes/tandem/get_id_tandem.php',
+    url: 'classes/tandem/getidtandem.php',
     success:  function(response) {
       let idtandem = JSON.parse(response);
       let id;
@@ -90,15 +91,14 @@ function get_id_tandem(callback) {
  * @param {*} id .
  */
 function to_update(student_tandem, id) {
-  let url = (edit == true) ? 'classes/tandem/edit_tandem.php' : 'classes/tandem/save_tandem.php';
+  let url = (edit == true) ? 'classes/tandem/edittandem.php' : 'classes/tandem/savetandem.php';
   if (student_tandem.length === 2) {
-    url = 'classes/tandem/delete_tandem.php';
+    url = 'classes/tandem/deletetandem.php';
   } 
   $.ajax({
     data: {idcourse: id_course3(), student_tandem, idtandem: id},
     url,
     success:  function() {
-      // reset_tandem();
       window.location.reload();
     }
   });
@@ -110,13 +110,13 @@ function to_update(student_tandem, id) {
 function to_edit(no_tand) {
   $.ajax({
     data: {idcourse: id_course3()},
-    url: 'classes/tandem/get_tandem.php',
+    url: 'classes/tandem/gettandem.php',
     success:  function(response) {
     let tandem = [];
     if (response.length == 2) {
       edit = false;
       $('#result_in_tandem').html('');
-      $('#result_in_tandem').append('No tandem here');
+      $('#result_in_tandem').append($notandemhere);
       notandemhere = true;
     } else {
       notandemhere = false;
@@ -142,7 +142,7 @@ function to_edit(no_tand) {
           <p>`
           + no_tand[tandem_value[i]] + `
           &nbsp;&nbsp;&nbsp;
-          <img id="frame" style="width: 18px; height: 18px;" class="no_es_igual" src="img/no-es-igual.png" alt="bin" >
+          <img id="frame" style="width: 18px; height: 18px;" class="no_es_igual" src="img/notigual.png" alt="bin" >
           &nbsp;&nbsp;&nbsp;
           ` + no_tand[tandem_value[i + 1]] + `
           &nbsp;&nbsp;&nbsp;
@@ -193,13 +193,13 @@ $('#menucurso_tandem').change(function() {
   let idcourse = id_course3();
     $.ajax({
       data: {idcourse},
-      url: 'classes/course/get_students_no_group.php',
+      url: 'classes/course/getstudentsnogroup.php',
       success: function(response) {
         const element = $.parseJSON(response);
           $('#menustudent_one').html('');
-          $('<option/>').val(-4).html('Choose...').appendTo('#menustudent_one');
+          $('<option/>').val(-4).html($choose).appendTo('#menustudent_one');
           $('#menustudent_two').html('');
-          $('<option/>').val(-4).html('Choose...').appendTo('#menustudent_two');
+          $('<option/>').val(-4).html($choose).appendTo('#menustudent_two');
           get_data(element, to_edit);
         }
     });
@@ -238,7 +238,7 @@ $('#add_btn_tandem').on('click', function() {
       <p>`
       + no_tand[studentone_value()] + `
       &nbsp;&nbsp;&nbsp;
-      <img id="frame" style="width: 18px; height: 18px;" class="no_es_igual" src="img/no-es-igual.png" alt="bin" >
+      <img id="frame" style="width: 18px; height: 18px;" class="no_es_igual" src="img/notigual.png" alt="bin" >
       &nbsp;&nbsp;&nbsp;
       ` + no_tand[studenttwo_value()] + `
       &nbsp;&nbsp;&nbsp;

@@ -21,7 +21,6 @@
  * @author      2022 Aina Palacios
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 Aina Palacios & Eurecat.dev
- * @since       3.11
  */
 
 

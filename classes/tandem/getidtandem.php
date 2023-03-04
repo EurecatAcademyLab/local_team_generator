@@ -22,12 +22,21 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
   */
+/**
+ * Get the tandem from DB.
+ */
+require_once(__DIR__.'/../../../../config.php');
+require_once($CFG->dirroot.'/course/lib.php');
+require_once($CFG->dirroot.'/lib/formslib.php');
+require_login();
 
+$idcourse = optional_param('idcourse', null, PARAM_INT);
+$studenttandem = optional_param('student_tandem', null, PARAM_TEXT);
 
-defined('MOODLE_INTERNAL') || die();
+global $DB;
+$sql = "SELECT gg.id FROM {local_gg_tandem} gg WHERE gg.course_id = ?;";
 
-$plugin->component = 'local_group_generator';
-$plugin->release = '0.1.0';
-$plugin->version = 2022140903;
-$plugin->requires = 2021051700;
-$plugin->maturity = MATURITY_ALPHA;
+$result = $DB->get_records_sql($sql, array($idcourse));
+
+    echo json_encode($result);
+

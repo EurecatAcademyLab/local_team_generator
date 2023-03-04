@@ -20,7 +20,6 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
  */
 
 
@@ -32,8 +31,8 @@ $(document).ready(function() {
 let $processing = 'Processing, please hold...';
 let $choose = 'Choose...';
 let $allstudents = 'All students';
-let $nostudent = 'No students here';
-let $nofilter = 'No personal filter ';
+let $nostudent = 'No students here.';
+let $nofilter = 'No personal filter.';
 let $nbsp = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 let $coursecompleted = $nbsp + 'Course completed';
 let $meangrade = $nbsp + 'Mean grade';
@@ -41,9 +40,25 @@ let $cFilter = 'Course Filter';
 let $pFilter = 'Personal Filter';
 let $cCompleted = 'Course Completed';
 let $mGrade = 'Mean grade';
+let $notenoughuser = 'Not Enough Users.';
+let $thresholdempty = '* Threshold field cannot be left empty.';
+let $thresholdzero = '* Threshold field cannot be zero or empty.';
+let $thresholdnumber = '* Insert a number for the threshold.';
+let $selecthomogenic = '* Select Homogenic or Heterogenic group.';
+let $typename = '* This field cannot be empty.';
+let $idcourse = '* Please, select a course.';
+let $idgroup = '* Please, select a group for this course.';
+let $formatosplit = '* Please, select a format to split the new group.';
+let $numberstudent = '* Please insert the number of students.';
+let $numberstudentzero = '* Students field cannot be zero.';
+let $numbergrouop = '* Please insert the number of groups.';
+let $numbergrouopzero = '* Students field cannot be zero.';
+
+
 let filter = '';
 // eslint-disable-next-line no-unused-vars
 let personalfilter = [];
+
 
 $('#save_button').hide();
 $('#managedelcontainer').hide();
@@ -106,19 +121,6 @@ $('#typeNameFilter').keyup(function() {
 /**
  * To get values to initial.
  */
-// function emptyvalueby(){
-//   document.getElementById("numberByStudent").value = "";
-//   document.getElementById("numberbygroup").value = "";
-// }
-/**
- * To get values to initial.
- */
-// function emptyvaluethreshold(){
-//   document.getElementById("thresholdtype").value = "";
-// }
-/**
- * To get values to initial.
- */
 function emptyvaluetitle() {
   document.getElementById('typeNameFilter').value = "";
 }
@@ -133,7 +135,7 @@ $('#menucurso').change(function() {
   let idcourse = idCourse();
   $.ajax({
     data: {idcourse},
-    url: 'classes/course/get_course_have_group.php',
+    url: 'classes/course/getcoursehavegroup.php',
     beforeSend: function() {
         $("#contenedor_ajax").html($processing);
     },
@@ -167,7 +169,7 @@ function getstudentsnogroup() {
   let idcourse = idCourse();
   $.ajax({
         data: {idcourse},
-        url: 'classes/course/get_students_no_group.php',
+        url: 'classes/course/getstudentsnogroup.php',
         success: function(response) {
               $('.fitem').remove();
               const element = $.parseJSON(response);
@@ -182,7 +184,7 @@ function getstudentsnogroup() {
 function insertgroupcourseoption() {
   $.ajax({
         data: {value: idCourse()},
-        url: 'classes/course/get_group_course.php',
+        url: 'classes/course/getgroupcourse.php',
         beforeSend: function() {
             $("#contenedor_ajax").html($processing);
         },
@@ -226,7 +228,7 @@ function gruposformato() {
 function getstudentswithgroup() {
   $.ajax({
         data: {value: idgroup()},
-        url: 'classes/course/get_student_with_group.php',
+        url: 'classes/course/getstudentwithgroup.php',
         success: function(response) {
               $('.fitem').remove();
               const element = $.parseJSON(response);
@@ -340,7 +342,7 @@ $('#with_history').click(function() {
   if ($(this).is(':checked')) {
     $.ajax({
       data: {idcourse: idCourse()},
-      url: 'classes/history/get_history.php',
+      url: 'classes/history/gethistory.php',
       success:  function(response) {
         history = JSON.parse(response);
         history = Object.keys(history);
@@ -363,7 +365,7 @@ $('#incompatible_tandem').click(function() {
   if ($(this).is(':checked')) {
     $.ajax({
       data: {idcourse: idCourse()},
-      url: 'classes/tandem/get_tandem.php',
+      url: 'classes/tandem/gettandem.php',
       success:  function(response) {
         tandem = response;
         tandem = JSON.parse(tandem);
@@ -391,7 +393,7 @@ $('#incompatible_tandem').click(function() {
 function getCourseCompleted() {
   $.ajax({
     data: {idcourse: idCourse(), idarray},
-    url: 'classes/features/course_completed.php',
+    url: 'classes/features/coursecompleted.php',
     success: function(response) {
       console.log(response);
       $('#meancourse').html('');
@@ -456,7 +458,7 @@ function extractmean2(response) {
 function getMeanGrade() {
   $.ajax({
     data: {idcourse: idCourse(), idarray},
-    url: 'classes/features/mean_grade.php',
+    url: 'classes/features/meangrade.php',
     success: function(response) {
       console.log(response);
       $('#meancourse').html('');
@@ -507,7 +509,7 @@ function getPersonalFilter() {
   personalfilterstudent = '';
   $.ajax({
     data: {idcourse: idCourse(), idfilter: idfilter()},
-    url: 'classes/filter/get_personal_filter.php',
+    url: 'classes/filter/getpersonalfilter.php',
     success: function(response) {
       let pf = JSON.parse(response);
       pfvalues = Object.values(pf);
@@ -558,10 +560,10 @@ function getPersonalFilter() {
 function getfilter() {
   $.ajax({
     data: {value: idCourse()},
-    url: 'classes/filter/get_filter_course.php',
+    url: 'classes/filter/getfiltercourse.php',
     success:  function(response) {
       $('#menupersonal_filter').html('');
-      $('<option/>').val(-6).attr("checked", true).html($choose).appendTo('#menupersonal_filter');
+      $('<option/>').val(-6).html($choose).attr('checked', true).appendTo('#menupersonal_filter');
       $('<option/>').val(-5).html($cFilter).attr("disabled", 'disabled').css('opacity', '0.25').appendTo('#menupersonal_filter');
       $('<option/>').val(-2).html($coursecompleted).appendTo('#menupersonal_filter');
       $('<option/>').val(-1).html($meangrade).appendTo('#menupersonal_filter');
@@ -707,7 +709,7 @@ function createthegroup() {
       let element = JSON.parse(response);
       if (element.error) {
         $('#output_print_conte').html(' ');
-        $('#output_print_conte').append(`<p class ="text-danger">Not Enough Users</p>`);
+        $('#output_print_conte').append(`<p class ="text-danger">${$notenoughuser}</p>`);
       } else if (element.warning) {
         $('#output_print_conte').html(' ');
         $('#output_print_conte').append(`<p class ="text-warning">${element.warning_messages}</p>`);
@@ -836,17 +838,9 @@ function saveinhistory(){
   $.ajax({
     data: {
       idc, idg, t, tV, h, filter, threshold, homogenic, tandem, vNT, k, idA, SplitG},
-    url: 'classes/save/save_groups_db.php',
+    url: 'classes/save/savegroupsdb.php',
     success:  function(response) {
       console.log(response);
-      // newurl = window.location.href;
-      // if (newurl.indexOf('#') == -1) {
-      //   newurl = window.location.href + "#history";
-      // } else {
-      //   tosplit = newurl.indexOf('#');
-      //   newurl = newurl.substring(tosplit);
-      // }
-      // window.location.assign(newurl);
       window.location.reload();
     }
   });
@@ -863,7 +857,7 @@ $('#saveinmoodle').click(function() {
 
   $.ajax({
     data: {idC: idCourse(), k, SplitG},
-    url: 'classes/save/save_teams_moodle.php',
+    url: 'classes/save/saveteamsmoodle.php',
     success:  function(response) {
         console.log(response);
     }
@@ -905,47 +899,47 @@ function validationformcreate() {
   $('.validationclass').html('');
 
   if ($('#typeNameFilter').val() == 0 || $('#typeNameFilter').val() == '' || $('#typeNameFilter').val() === null) {
-    $('#valiTitleContainer').append('<p class="text-danger"><small>* This field cannot be empty </small></p>');
+    $('#valiTitleContainer').append(`<p class="text-danger"><small>${$typename}</small></p>`);
     return false;
   }
 
   if (idCourse() == '' || idCourse() === null || idCourse() == undefined) {
-    $('#valiCourseContainer').append('<p class="text-danger"><small>* Please, select a course</small></p>');
+    $('#valiCourseContainer').append(`<p class="text-danger"><small>${$idcourse}</small></p>`);
     return false;
   }
   if ((idgroup() != 1) && (idgroup() == -2)) {
-    $('#valiCourseGroupContainer').append('<small class="text-danger">* Please, select a group for this course</small>');
+    $('#valiCourseGroupContainer').append(`<small class="text-danger">${$idgroup}</small>`);
     return false;
   }
   if (formatoToSplit() == '' || formatoToSplit() === null || formatoToSplit() == undefined) {
-    $('#valiFormatContainer').append('<small class="text-danger">* Please, select a format to split the new group</small>');
+    $('#valiFormatContainer').append(`<small class="text-danger">${$formatosplit}</small>`);
     return false;
   }
   if (formatoToSplit() == 1) {
     if (numberByStudent() == " ") {
-      $('#valiStudentsContainer').append('<small class="text-danger">* Please insert the number of students</small>');
+      $('#valiStudentsContainer').append(`<small class="text-danger">${$numberstudent}</small>`);
       return false;
     }
     if (numberByStudent() == 0) {
-      $('#valiStudentsContainer').append('<small class="text-danger">* Students field cannot be zero</small>');
+      $('#valiStudentsContainer').append(`<small class="text-danger">${$numberstudentzero}</small>`);
       return false;
     }
     if ((parseFloat(numberByStudent()) === isNaN) || (isFinite(numberByStudent()) !== true)) {
-      $('#valiStudentsContainer').append('<small class="text-danger">* Please insert the number of students</small>');
+      $('#valiStudentsContainer').append(`<small class="text-danger">${$numberstudent}</small>`);
       return false;
     }
   }
   if (formatoToSplit() == 0) {
     if (numberbygroup() == " ") {
-      $('#valiGroupContainer').append('<small class="text-danger">* Insert the number of groups</small>');
+      $('#valiGroupContainer').append(`<small class="text-danger">${$numbergrouop}</small>`);
       return false;
     }
     if (numberbygroup() == 0) {
-      $('#valiGroupContainer').append('<small class="text-danger">* Groups field cannot be zero</small>');
+      $('#valiGroupContainer').append(`<small class="text-danger">${$numbergrouopzero}</small>`);
       return false;
     }
     if ((parseFloat(numberbygroup()) === isNaN) || (isFinite(numberbygroup()) !== true)) {
-      $('#valiGroupContainer').append('<small class="text-danger">* Insert the number of groups</small>');
+      $('#valiGroupContainer').append(`<small class="text-danger">${$numbergrouop}</small>`);
       return false;
     }
   }
@@ -960,63 +954,26 @@ function validationformcreate() {
 function validationformcreate2() {
   if ((idfilter() == -1) || (idfilter() == -2)) {
     if (thresholdtype() == ' ') {
-      $('#valifilterContainer').append('<small class="text-danger">* Threshold field cannot be left empty</small>');
+      $('#valifilterContainer').append(`<small class="text-danger">${$thresholdempty}</small>`);
       return false;
     }
     if (thresholdtype() == 0) {
-      $('#valifilterContainer').append('<small class="text-danger">* Threshold field cannot be zero or empty </small>');
+      $('#valifilterContainer').append(`<small class="text-danger">${$thresholdzero} </small>`);
       return false;
     }
     if ((parseFloat(thresholdtype()) === isNaN) || (isFinite(thresholdtype()) !== true)) {
-      $('#valifilterContainer').append('<small class="text-danger">* Insert a number for the threshold</small>');
+      $('#valifilterContainer').append(`<small class="text-danger">${$thresholdnumber}</small>`);
     return false;
     }
   }
   if ((idfilter() == -2) || (idfilter() == -1)) {
-
     if (!($('input[name = "cooperative_group_checkbox"]').is(':checked'))) {
-      $('#valifilterContainer').append('<small class="text-danger">* Select Homogenic or Heterogenic group</small>');
+      $('#valifilterContainer').append(`<small class="text-danger">${$selecthomogenic}</small>`);
       return false;
     }
   }
   return true;
 }
-
-$('#csvexport').on('click', function() {
-
-  let keyscsv = '';
-  for (let i = 0; i < csvexport.length; i++) {
-    keyscsv += [Object.keys(csvexport[i])] + ',' + [Object.values(csvexport[i]) ]+ '\n';
-  }
-
-  const headers = ' ,Name,Teams \n';
-  const main = keyscsv;
-  const csv = [headers, ...main].join();
-  startcsvdownload(csv);
-
-});
-
-/**
- * To start the download.
- * @param {*} input .
- */
-function startcsvdownload(input) {
-  const blob = new Blob([input], {type: 'team/csv '});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  var f = new Date();
-  var d = f.getFullYear() + '.' + f.getMonth() + '.' + f.getDate() + '.' + f.getHours() + ':' + f.getMinutes();
-  a.download = 'teamgenerator_' + d + '.csv';
-  a.href = url;
-  a.style.display = 'none';
-
-  document.body.appendChild(a);
-
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
 
 /**
  * To hide or initialize fields.
@@ -1067,7 +1024,7 @@ function restar() {
   $('.validationclass').html('');
 }
 restar();
- 
+
 });
 });
 

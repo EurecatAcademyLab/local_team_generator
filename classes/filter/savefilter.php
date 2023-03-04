@@ -21,21 +21,31 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
  */
 
 
+/**
+ * Create a filter.
+ */
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_login();
 
-$idcourse = optional_param('idcourse', null, PARAM_INT);
-$idfilter = optional_param('idfilter', null, PARAM_INT);
+$title = optional_param('title', null, PARAM_TEXT);
+$idcourse = optional_param('idcourse2', null, PARAM_INT);
+$values = optional_param('values', null, PARAM_TEXT);
+$studentonfilter = optional_param('students', null, PARAM_TEXT);
 
+    global $DB;
 
-$result = $DB->get_records_sql("SELECT *
-      FROM {local_gg_filter_name}
-      WHERE course_id = ? AND id = ?;", array($idcourse , $idfilter));
+    $record = new stdClass();
+    $record->filter_name = $title;
+    $record->course_id = $idcourse;
+    $record->filter_value = $values;
+    $record->student_on_filter = $studentonfilter;
+    $record->timecreated = time();
 
-echo json_encode($result);
+    $DB->insert_record('local_gg_filter_name', $record);
+
+    echo 'Task Added Succesfully';

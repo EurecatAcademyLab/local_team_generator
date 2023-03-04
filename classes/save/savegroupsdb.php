@@ -21,53 +21,60 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
- */
+  */
 
 /**
- * Save in moodle groups.
+ * Save in history of Team generator.
  */
+
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_login();
 
-$idcourse = optional_param('idC', null, PARAM_INT);
+$idcourse = optional_param('idc', null, PARAM_INT);
+$idgroup = optional_param('idg', null, PARAM_INT);
+$toggle = optional_param('t', null, PARAM_INT);
+$togglevalue = optional_param('tV', null, PARAM_INT);
+$history = optional_param('h', null, PARAM_INT);
+$filter = optional_param('filter', null, PARAM_TEXT);
+$threshold = optional_param('threshold', null, PARAM_INT);
+$idarrayusers = optional_param('idA', null, PARAM_TEXT);
+$homogenic = optional_param('homogenic', null, PARAM_INT);
+$tandem = optional_param('tandem', null, PARAM_INT);
+$valuenametitle = optional_param('vNT', null, PARAM_TEXT);
 $keys = optional_param('k', null, PARAM_TEXT);
 $arraysplitgroups = optional_param('SplitG', null, PARAM_TEXT);
 
 $arraysplitgroups = json_decode($arraysplitgroups);
 $keys = json_decode($keys);
 $count = count($arraysplitgroups);
-$countk = count($keys);
+($history === null) ? $history = 0 : $history;
+($filter === null) ? $filter = 0 : $filter;
 
-global $DB;
-$idkey = $DB->get_records_sql("SELECT id FROM {groups} ORDER BY id DESC LIMIT 1");
-$idkey = intval(array_key_first($idkey));
-
-$counter = 1;
+    global $DB;
 for ($i = 0; $i < $count; $i++) {
+
     $record = new stdClass();
-    $record->courseid = $idcourse;
-    $record->name  = $keys[$i];
+    $record->id_user = $idarrayusers;
+    $record->id_course = $idcourse;
+    $record->id_group = $idgroup;
+    $record->toggle  = $toggle;
+    $record->toggle_value  = $togglevalue;
+    $record->title  = $valuenametitle;
+    $record->titleteam  = $keys[$i];
+    $record->split_group = implode(",", $arraysplitgroups[$i]);
+    $record->history = $history;
+    $record->filter = $filter;
+    $record->homogenic = $homogenic;
+    $record->threshold = $threshold;
+    $record->tandem = $tandem;
     $record->timecreated = time();
-    $DB->insert_record('groups', $record);
 
-    $idkey = $idkey + $counter;
-    $userid = $arraysplitgroups[$i];
-    for ($j = 0; $j < count($userid); $j++) {
-
-        $r = new stdClass();
-        $r->groupid = $idkey;
-        $r->userid = $userid[$j];
-        $r->timeadded = time();
-        $r->component = 'local_team_generator';
-        $DB->insert_record('groups_members', $r);
-    }
-    $counter + $i;
+    $DB->insert_record('local_group_generator', $record);
 }
 
-\core\notification::add(get_string('successmoodle', 'local_group_generator'), \core\output\notification::NOTIFY_INFO);
+\core\notification::add(get_string('success', 'local_group_generator'), \core\output\notification::NOTIFY_SUCCESS);
 
-echo 'ok';
+    echo 'Success';
 

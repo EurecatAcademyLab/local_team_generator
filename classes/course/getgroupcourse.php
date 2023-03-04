@@ -21,19 +21,21 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
  */
 
-/**
- * Show the history from group generator.
- */
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_login();
 
-$idcourse = optional_param('idcourse', null, PARAM_INT);
-$sql = "SELECT DISTINCT g.split_group  FROM {local_group_generator} g WHERE g.id_course = ?;";
+$idcourse = optional_param('value', null, PARAM_TEXT);
 
+$sql = "SELECT DISTINCT g.id, g.name FROM {course} c
+JOIN {enrol} e ON e.courseid = c.id JOIN {user_enrolments} ue ON ue.enrolid = e.id
+JOIN {user} u ON u.id = ue.userid LEFT JOIN {groups_members} gm ON gm.userid = u.id
+LEFT JOIN {groups} g ON g.id = gm.groupid AND g.courseid = c.id
+WHERE g.id is not NULL AND c.id = ? ORDER BY g.name;";
 $result = $DB->get_records_sql($sql, array($idcourse));
-echo json_encode($result);
+
+    echo json_encode($result);
+

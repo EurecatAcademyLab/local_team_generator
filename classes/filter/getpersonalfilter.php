@@ -21,22 +21,20 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
  */
+
 
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_login();
 
-$idcourse = optional_param('idcourse', null, PARAM_TEXT);
+$idcourse = optional_param('idcourse', null, PARAM_INT);
+$idfilter = optional_param('idfilter', null, PARAM_INT);
 
-$havegroup = $DB->get_records_sql(
-    "SELECT g.id, g.name, c.id as 'course' FROM {course} c JOIN {groups} g ON g.courseid = c.id WHERE c.id = ?;", array($idcourse)
-);
 
-if (empty($havegroup) || is_null($havegroup)) {
-    $result = '1';
-    echo $result;
-}
+$result = $DB->get_records_sql("SELECT *
+      FROM {local_gg_filter_name}
+      WHERE course_id = ? AND id = ?;", array($idcourse , $idfilter));
 
+echo json_encode($result);

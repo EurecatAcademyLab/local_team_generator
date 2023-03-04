@@ -21,25 +21,21 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
  */
-/**
- * Delete incompatible tandem partner.
- */
+
 
 require_once(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/lib/formslib.php');
-
 require_login();
 
-$id = optional_param('idtandem', null, PARAM_INT);
-$studenttandem = optional_param('student_tandem', null, PARAM_TEXT);
-$idcourse = optional_param('idcourse', null, PARAM_INT);
+$idcourse = optional_param('idcourse', null, PARAM_TEXT);
 
-global $DB;
+$sql = "SELECT u.id, concat(u.firstname,' ',u.lastname) as 'name', c.fullname, c.id as 'curso'
+FROM {role_assignments} ra JOIN {user} u ON u.id = ra.userid
+JOIN {role} r ON r.id = ra.roleid JOIN {context} cxt ON cxt.id = ra.contextid
+JOIN {course} c ON c.id = cxt.instanceid WHERE ra.userid = u.id AND ra.contextid = cxt.id
+AND cxt.contextlevel = 50 AND cxt.instanceid = c.id AND r.id = 5 AND c.id = ?;";
+$result = $DB->get_records_sql($sql, array($idcourse));
 
-    $DB->delete_records('local_gg_tandem', ['id' => $id]);
-
-    echo 'Succesfully Delete proccess';
-
+echo json_encode($result);

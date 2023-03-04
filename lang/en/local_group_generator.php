@@ -21,7 +21,6 @@
  * @author      2022 JuanCarlo Castillo <juancarlo.castillo20@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @copyright   2022 JuanCa Castillo & Eurecat.dev
- * @since       3.11
  * @category    string
  */
 
@@ -85,9 +84,9 @@ $string['explain_groupcour_help'] = 'If the course have groups this will display
 $string['explain_formatsplit'] = 'To decide how the groups will be divided, having the option to be divided by students or by groups.';
 $string['explain_formatsplit_help'] = 'To decide how the groups will be divided, having the option to be divided by students or by groups.';
 $string['explain_bystudent_help'] = 'To write a certain number of students for each group. Only allows numeric values';
-$string['explain_bygroup_help'] = 'To write a given number of groups or to divide. Only allows numeric values';
+$string['explain_bygroup_help'] = 'To write a given number of groups to divide. Only allows numeric values';
 $string['explain_bystudent'] = 'To write a certain number of students for each group. Only allows numeric values';
-$string['explain_bygroup'] = 'To write a given number of groups or to divide. Only allows numeric values';
+$string['explain_bygroup'] = 'To write a given number of groups to divide. Only allows numeric values';
 $string['explainhisto'] = 'By clicking this box, the program will use the previously generated groups as a reference.';
 $string['explainhisto_help'] = 'By clicking this box, the program will use the previously generated groups as a reference.';
 $string['explain_tandem'] = 'By clicking this box, the program will refer to the pairs created as incompatible tandems. If you wish to modify the couples created, go to that tab.';
@@ -100,7 +99,7 @@ $string['explain_heterogen'] = 'This option allows you to choose the groups from
 $string['explain_threshold'] = 'The threshold allows us to divide the group in a more flexible way. by changing this value we generate non-exact halves.';
 $string['explain_threshold_help'] = 'The threshold allows us to divide the group in a more flexible way. by changing this value we generate non-exact halves.';
 $string['explain_title'] = 'Write a title for all the project';
-$string['titletable'] = 'Team Generator History ';
+$string['titletable'] = 'Team Generator History';
 $string['id_user'] = 'Users';
 $string['id_course'] = 'Course';
 $string['id_group'] = 'Subgroup';
